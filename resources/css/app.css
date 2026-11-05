@@ -1,0 +1,190 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
+
+/* Same tokens as delwar_next_js/src/app/globals.css, so the admin matches the website. */
+@theme {
+    --font-sans: 'Montserrat', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --color-ink: #0b1a24;
+    --color-ink-2: #112737;
+    --color-navy: #15334a;
+    --color-bone: #f4eee3;
+    --color-sand: #e8ddc8;
+    --color-brass: #c9a25b;
+    --color-brass-hover: #ddb66e;
+    --color-muted: #a6b6c0;
+    --color-line: rgb(244 238 227 / 0.13);
+    --color-danger: #f0897d;
+}
+
+@layer base {
+    body {
+        @apply bg-ink font-sans text-bone antialiased;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brass;
+    }
+}
+
+@layer components {
+    .eyebrow {
+        @apply text-[11px] font-semibold tracking-[0.22em] text-brass uppercase;
+    }
+
+    .panel {
+        @apply rounded-2xl border border-line bg-ink-2 p-6;
+    }
+
+    .panel-title {
+        @apply text-sm font-semibold text-bone;
+    }
+
+    .panel-note {
+        @apply mt-1 text-xs text-muted;
+    }
+
+    .btn-primary {
+        @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-brass px-5 text-sm font-semibold text-ink transition-colors hover:bg-brass-hover disabled:cursor-wait disabled:opacity-60;
+    }
+
+    .btn-ghost {
+        @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-line px-3.5 text-xs font-medium text-bone transition-colors hover:border-brass hover:text-brass;
+    }
+
+    .btn-danger {
+        @apply text-danger hover:border-danger hover:text-danger;
+    }
+
+    .badge {
+        @apply rounded-full border border-line px-2.5 py-1 text-[11px] font-semibold text-muted;
+    }
+
+    .badge-live {
+        @apply border-brass/50 text-brass;
+    }
+
+    .file-input {
+        @apply w-full cursor-pointer rounded-lg border border-line bg-ink text-xs text-muted file:mr-3 file:cursor-pointer file:border-0 file:bg-navy file:px-3 file:py-2.5 file:text-xs file:font-medium file:text-bone aria-invalid:border-danger;
+    }
+
+    .page-link {
+        @apply block min-h-9 min-w-9 rounded-md px-2.5 py-2.5 text-center;
+    }
+
+    a.page-link {
+        @apply transition-colors hover:bg-navy hover:text-bone;
+    }
+
+    .admin-dialog {
+        @apply m-auto max-h-[92dvh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-2xl border border-line bg-ink-2 p-0 text-bone backdrop:bg-ink/80 backdrop:backdrop-blur-sm;
+    }
+
+    .swal-confirm {
+        color: var(--color-ink) !important;
+    }
+
+    .field {
+        @apply w-full rounded-lg border border-line bg-ink-2 px-4 py-3 text-sm text-bone transition-colors placeholder:text-muted/60 focus:border-brass focus:outline-none aria-invalid:border-danger;
+    }
+}
+
+/* simple-datatables: its markup, styled with the brand tokens instead of its default stylesheet. */
+.datatable-top,
+.datatable-bottom {
+    @apply flex flex-wrap items-center justify-between gap-3;
+}
+
+.datatable-top {
+    @apply mb-4;
+}
+
+.datatable-bottom {
+    @apply mt-4 text-xs text-muted;
+}
+
+.datatable-dropdown label {
+    @apply flex items-center gap-2 text-xs text-muted;
+}
+
+/* The placeholder already says "Search content", so the extra label stays for screen readers. */
+.datatable-search label {
+    @apply sr-only;
+}
+
+.datatable-selector,
+.datatable-input {
+    @apply rounded-lg border border-line bg-ink px-3 py-2 text-xs text-bone focus:border-brass focus:outline-none;
+}
+
+.datatable-search {
+    @apply w-full sm:w-auto;
+}
+
+.datatable-input {
+    @apply w-full placeholder:text-muted/70 sm:w-56;
+}
+
+.datatable-container {
+    @apply overflow-x-auto;
+}
+
+.datatable-table {
+    @apply w-full min-w-[720px] border-collapse text-left text-sm;
+}
+
+.datatable-table th {
+    @apply border-b border-line pb-3 pr-4 text-[11px] font-semibold tracking-[0.14em] text-muted uppercase;
+}
+
+.datatable-table td {
+    @apply border-b border-line py-3.5 pr-4 align-middle;
+}
+
+.datatable-table tbody tr {
+    @apply transition-colors hover:bg-navy/40;
+}
+
+.datatable-sorter {
+    @apply relative inline-block pr-4 text-left uppercase hover:text-bone;
+}
+
+.datatable-sorter::after {
+    content: '↕';
+    @apply absolute right-0 text-[10px] opacity-40;
+}
+
+.datatable-ascending .datatable-sorter::after {
+    content: '↑';
+    @apply text-brass opacity-100;
+}
+
+.datatable-descending .datatable-sorter::after {
+    content: '↓';
+    @apply text-brass opacity-100;
+}
+
+.datatable-pagination-list {
+    @apply flex items-center gap-1;
+}
+
+.datatable-pagination-list-item-link {
+    @apply block min-w-8 rounded-md px-2.5 py-1.5 text-center hover:bg-navy hover:text-bone;
+}
+
+.datatable-pagination .datatable-active .datatable-pagination-list-item-link {
+    @apply bg-brass font-semibold text-ink;
+}
+
+.datatable-pagination .datatable-disabled .datatable-pagination-list-item-link {
+    @apply cursor-default opacity-40 hover:bg-transparent;
+}
+
+.datatable-empty {
+    @apply py-8 text-center text-muted;
+}
