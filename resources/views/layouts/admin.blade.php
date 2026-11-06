@@ -15,7 +15,9 @@
         $navIdle = 'border-transparent text-sand hover:bg-navy/40 hover:text-bone';
         $content = [
             ['Hero slides', 'hero-slides.index', 'hero-slides.*'],
+            ['Projects', 'projects.index', 'projects.*'],
             ['Videos', 'videos.index', 'videos.*'],
+            ['Leadership', 'leaders.index', 'leaders.*'],
             ['Contact details', 'contact-details.edit', 'contact-details.*'],
         ];
         $mobile = [['Dashboard', 'dashboard', 'dashboard'], ...$content, ['Settings', 'settings.edit', 'settings.*']];
@@ -33,12 +35,6 @@
                 @foreach ($content as [$label, $route, $pattern])
                     <a href="{{ route($route) }}" @if (request()->routeIs($pattern)) aria-current="page" @endif
                         class="{{ $navLink }} {{ request()->routeIs($pattern) ? $navActive : $navIdle }}">{{ $label }}</a>
-                @endforeach
-                @foreach (['Projects', 'Leadership'] as $screen)
-                    <span class="flex items-center justify-between px-3 py-2 text-muted">
-                        {{ $screen }}
-                        <span class="text-[10px] tracking-wider uppercase">Soon</span>
-                    </span>
                 @endforeach
 
                 <p class="eyebrow mt-7 mb-2 px-3">Administration</p>

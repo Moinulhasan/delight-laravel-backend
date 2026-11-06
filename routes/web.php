@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactDetailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HeroSlideController;
+use App\Http\Controllers\LeaderController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +25,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/videos/reorder', [VideoController::class, 'reorder'])->name('videos.reorder');
     Route::patch('/videos/{video}/toggle', [VideoController::class, 'toggle'])->name('videos.toggle');
     Route::resource('videos', VideoController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::post('/leaders/reorder', [LeaderController::class, 'reorder'])->name('leaders.reorder');
+    Route::patch('/leaders/{leader}/toggle', [LeaderController::class, 'toggle'])->name('leaders.toggle');
+    Route::resource('leaders', LeaderController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::post('/projects/reorder', [ProjectController::class, 'reorder'])->name('projects.reorder');
+    Route::patch('/projects/{project}/toggle', [ProjectController::class, 'toggle'])->name('projects.toggle');
+    Route::resource('projects', ProjectController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('/contact-details', [ContactDetailController::class, 'edit'])->name('contact-details.edit');
     Route::put('/contact-details', [ContactDetailController::class, 'update'])->name('contact-details.update');

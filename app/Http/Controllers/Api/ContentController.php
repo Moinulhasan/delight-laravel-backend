@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ContactDetail;
 use App\Models\HeroSlide;
+use App\Models\Leader;
+use App\Models\Project;
 use App\Models\Setting;
 use App\Models\Video;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +34,31 @@ class ContentController extends Controller
                 'uploadDate' => $video->upload_date?->toDateString(),
                 'duration' => $video->isoDuration(),
             ]))->all(),
+            'leaders' => Leader::where('is_active', true)->orderBy('sort_order')->get()->map(fn (Leader $leader) => array_filter([
+                'name' => $leader->name,
+                'initials' => $leader->initials,
+                'role' => $this->localized($leader->role_en, $leader->role_bn),
+                'quote' => $this->localized($leader->quote_en, $leader->quote_bn),
+                'photo' => $leader->photo ? $this->sized($leader->photo, $leader->photo_alt_en ?: $leader->name, $leader->photo_alt_bn) : null,
+            ]))->all(),
+            'projects' => Project::where('is_active', true)->orderBy('sort_order')->get()->map(fn (Project $project) => array_filter([
+                'slug' => $project->slug,
+                'name' => $this->localized($project->name_en, $project->name_bn),
+                'tagline' => $this->localized($project->tagline_en, $project->tagline_bn),
+                'status' => $project->status,
+                'type' => $project->type,
+                'handover' => $project->handover,
+                'area' => $project->area_slug,
+                'areaName' => $this->localized($project->area_name_en, $project->area_name_bn),
+                'address' => $this->localized($project->address_en, $project->address_bn),
+                'cover' => $this->sized($project->cover_image, $project->cover_alt_en, $project->cover_alt_bn),
+                'cardStats' => $project->card_stats ?? [],
+                'featured' => $project->is_featured,
+                'seo' => array_filter([
+                    'title' => filled($project->seo_title_en) ? $this->localized($project->seo_title_en, $project->seo_title_bn) : null,
+                    'description' => filled($project->seo_description_en) ? $this->localized($project->seo_description_en, $project->seo_description_bn) : null,
+                ]) ?: null,
+            ], fn ($value) => $value !== null))->all(),
             'contacts' => $this->contacts(ContactDetail::first()),
             'site' => $this->site(Setting::current()),
         ];
@@ -92,6 +119,18 @@ class ContentController extends Controller
     private function localized(string $en, ?string $bn): array
     {
         return array_filter(['en' => $en, 'bn' => $bn], 'filled');
+    }
+
+    /** `focus` (where to crop) only exists on images that came from the old site. */
+    private function sized(array $image, string $altEn, ?string $altBn): array
+    {
+        return array_filter([
+            'src' => url($image['src']),
+            'w' => $image['w'],
+            'h' => $image['h'],
+            'alt' => $this->localized($altEn, $altBn),
+            'focus' => $image['focus'] ?? null,
+        ]);
     }
 
     private function absolute(array $image): array
